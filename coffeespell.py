@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import datetime
+from util import inspectTitle
 
 STORENAME = 'COFFEESPELL'
 
@@ -10,7 +11,6 @@ def checkInt(i):
         return True
     except:
         return False
-
 
 def conquerPage(section, url):
     itemList = []
@@ -26,13 +26,6 @@ def conquerPage(section, url):
         prodName = a.find('strong', {'class': 'QNNliuiAk3'}).text.replace(',', '')
         item['product name'] = prodName
         
-        item['weight'] = 0
-        for n in prodName.replace('-', ' ').replace('_', ' ').split(' '):
-            if 'kg' in n or 'Kg' in n or 'KG' in n:
-                item['weight'] = int(n.replace('kg', '').replace('Kg', '').replace('KG', ''))*1000
-            elif '0g' in n or '0G' in n:
-                item['weight'] = n.replace('0G', '0').replace('0g', '0')
-        print(item['weight'])
         # 가격
         item['price'] = a.find('span', {'class': 'nIAdxeTzhx'}).text.replace(',', '')
         # 리뷰수, 평점 : a.find('em', {'class': '_1dH1kEDaAZ'})
@@ -53,6 +46,8 @@ def conquerPage(section, url):
         item['canBuy'] = 'N' if a.find('span', {'class': '_3Btky8fCyp'}) else 'Y'
         # 상세 설명
         item['detail'] = a.find('p', {'class', 'vChbm1yu9U'}).text.replace(',', '') if a.find('p', {'class', 'vChbm1yu9U'}) else 0
+        # 상품명 분석자료
+        item['extra'] = inspectTitle(prodName)
         itemList.append(item)
     return itemList
 
@@ -70,8 +65,24 @@ def conqureSection(section, url):
 
 def save(obj):
     f = open(datetime.datetime.now().strftime('%Y.%m.%d_%H%M') + '_' + obj['storename'] + ".csv", "a")
+    f.write("가게명, 일시, 생두/원두, 이미지, 상품명, 가격, 리뷰수, 평점, 재고여부, 상품설명, 국가명, 지역, 가공방식, 등급, 무게\n")
     for item in obj['itemList']:
-        f.write("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}\n".format(obj['storename'], obj['today'], item['section'], item['img'], item['product name'], item['weight'], item['price'], item['review'], item['grade'], item['canBuy'], item['detail']))
+        f.write("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}\n".format(
+            obj['storename'],
+            obj['today'],
+            item['section'],
+            item['img'],
+            item['product name'],
+            item['price'],
+            item['review'],
+            item['grade'],
+            item['canBuy'],
+            item['detail'],
+            str(item['extra']['country']) + 
+            str(item['extra']['region']) + 
+            str(item['extra']['process']) + 
+            str(item['extra']['grade']) + 
+            str(item['extra']['weight'])))
     f.close()
 
 def main():
@@ -85,7 +96,7 @@ def main():
     url = 'https://smartstore.naver.com/coffeespell/category/ff37e49dadcc4f17b1148766d247b2bb' # 원두
     itemList += conqureSection('원두', url)
     obj["itemList"] = itemList
-    # save(obj)
+    save(obj)
 
 
 main()
