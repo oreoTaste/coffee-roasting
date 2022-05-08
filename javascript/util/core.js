@@ -1,43 +1,50 @@
-import { save } from "./handleFile.js";
-
-export const findImg = (article, selector) => {
-    return article.find(`img${selector}`).attr('src')
+const findSelectorText = (article, selectorList) => {
+    let keyword = ''
+    for(let selector of selectorList) {
+        keyword += article.find(selector).text()
+    }
+    return keyword
 }
 export const findProdName = (article, selectorList) => {
-    let prodName = ''
-    for(let selector of selectorList) {
-        prodName += article.find(selector).text()
-    }
-    return prodName.replace(/,/g, '').replace(/_/g, ' ').replace(/\(/g, ' ').replace(/\)/g, ' ').replace(/\[/g, ' ').replace(/\]/g, ' ')
+    return findSelectorText(article, selectorList).replace(/,/g, '').replace(/_/g, ' ').replace(/\(/g, ' ').replace(/\)/g, ' ').replace(/\[/g, ' ').replace(/\]/g, ' ')
 }
 export const findPrice = (article, selectorList) => {
-    let price = ''
-    for(let selector of selectorList) {
-        price += article.find(selector).text()
+    return findSelectorText(article, selectorList).replace(/,/g, '').replace(/원/g, '')
+}
+export const prodDetail = (article, selectorList) => {
+    return findSelectorText(article, selectorList).replace(/,/g, '')
+}
+
+const findSelectorAttr = (article, selector, attr) => {
+    if(attr == 'attr') {
+        return article.find(`img${selector}`).attr('src')
+    } else if(attr == 'length') {
+        return article.find(selector).length
+    } else if(attr == 'href') {
+        return article.find(selector).attr('href')
     }
-    return price.replace(/,/g, '').replace(/원/g, '')
+}
+export const findImg = (article, selector) => {
+    return findSelectorAttr(article, selector, 'attr')
+}
+export const findUrl = (article, selector, url) => {
+    return url.slice(0, url.replace('//', '__').indexOf('/')) + findSelectorAttr(article, selector, 'href')
 }
 export const findIfNew = (article, selector) => {
-    return article.find(selector).length > 0 ? "New" : ""//new 태그 확인
+    return findSelectorAttr(article, selector, 'length') > 0 ? "New" : ""//new 태그 확인
 }
 
 export const findIfLimited = (article, selector) => {
-    return article.find(selector).length > 0 ? "Limited" : ""//limited 태그 확인
+    return findSelectorAttr(article, selector, 'length') > 0 ? "Limited" : ""//limited 태그 확인
 }
 export const findCanBuy = (article, selector) => {
-    return article.find(selector).length > 0 ? "N" : "Y"//품절 태그 확인
-}
-export const prodDetail = (article, selectorList) => {
-    let detail = ''
-    for(let selector of selectorList) {
-        detail += article.find(selector).text()
-    }
-    return detail.replace(/,/g, '')
+    return findSelectorAttr(article, selector, 'length') > 0 ? "N" : "Y"//품절 태그 확인
 }
 export const setHeader = () => {
     let item = new Map()
     item.set('section', '')
     item.set('img', '')
+    item.set('buy_url', '')
     item.set('product name', '')
     item.set('price', '')
     item.set('review', '')
@@ -51,6 +58,7 @@ export const setHeader = () => {
     obj.set('process', '')
     obj.set('grade', '')
     obj.set('weight', '')
+    obj.set('pricePerCup(20g)', '')
     item.set('extra', obj)        
     return [item]
 }

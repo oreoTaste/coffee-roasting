@@ -10,7 +10,9 @@ export function saveHead(obj, values) {
 
     if(header.includes('extra')) {
         header.splice(header.indexOf('extra'), 1)
-        header.push('country', 'region', 'process', 'grade', 'weight')
+        values.forEach((el) => {
+            header.push(...el.get('extra').keys())
+        })
     }
 
     // file

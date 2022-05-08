@@ -1,6 +1,6 @@
 import axios from "axios";
 import cheerio from "cheerio";
-import { findCanBuy, findIfLimited, findIfNew, findImg, findPrice, findProdName, inspectTitle, prodDetail, setHeader } from "./core.js";
+import { findCanBuy, findIfLimited, findIfNew, findImg, findPrice, findProdName, findUrl, inspectTitle, prodDetail, setHeader } from "./core.js";
 import { save } from "./handleFile.js";
 
 const findPagination = (article) => {
@@ -35,11 +35,14 @@ export async function getItemList(section, url) {
         item.set('section', section)
         item.set('img', findImg($(article), '.thumb'))
 
+        // buy_url
+        item.set('buy_url', findUrl($(article), 'div.box > a:nth-child(2)', url))
+
         let prodName = findProdName($(article).find('p.name'), ['span:nth-child(2)'])
         item.set('product name', prodName)
 
         let detailBox = $(article).find('ul.xans-product')
-        item.set('price', findPrice($(detailBox), ['li:nth-child(2) > span:nth-child(2)']))
+        item.set('price', findPrice($(detailBox), ['li:nth-child(2) > span:nth-child(2)']) || 0)
     
         let [review, grade] = [0, 0]
         item.set('review', findIfNew($(article), 'div.status > div.icon > img[src$="icon_global_01.gif"]')
@@ -50,6 +53,15 @@ export async function getItemList(section, url) {
         item.set('canBuy', findCanBuy($(article), 'div.status > div.icon > img[src$="soldout.gif"]'))
         item.set('detail', prodDetail($(detailBox), ['li:nth-child(3) > span']))
         item.set('extra', inspectTitle(prodName + " 1kg"))
+        let p = parseInt(item.get('price') || 0)
+        let w = item.get('extra').get('weight')
+        // pricePerCup(20g)
+        if(p == 0 || w == 0) {
+            item.get('extra').set('pricePerCup(20g)', 0)
+        } else {
+            item.get('extra').set('pricePerCup(20g)', p / w * 20)
+        }
+
         itemList.push(item)
     }
 
@@ -58,7 +70,7 @@ export async function getItemList(section, url) {
 
 export async function managePages(keyword, section, url, obj) {
     for(let page of await getPageList(url)) {
-        console.log(page)
+        console.log(`>> managePages : ${page} 시작`)
         let itemList = await getItemList(section, page)
         save(keyword, page, obj, itemList)
     }
