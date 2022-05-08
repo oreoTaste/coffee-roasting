@@ -1,6 +1,7 @@
 import fs from 'fs'
 
-export function saveHead(obj, values) {
+var FILENAME = ''
+export async function saveHead(obj, values, fileName) {
     // header
     let header = [...obj.keys()]
     values.forEach((el) => {
@@ -16,11 +17,11 @@ export function saveHead(obj, values) {
     }
 
     // file
-    let fileName = obj.get('today') + "_" + obj.get('storename') + ".csv"
-    fs.appendFile(fileName, header.join(', ') + '\n', (err) => console.log(err, 'head 출력'));
+    FILENAME = `${obj.get('today')}_${fileName}.csv`
+    fs.appendFile(FILENAME, header.join(', ') + '\n', (err) => /* console.log(err, 'head 출력') */ null);
 } 
 
-export function save(keyword, page, obj, values) {
+export async function save(keyword, page, obj, values) {
     // header
     // let header = [...obj.keys()]
     // values.forEach((el) => {
@@ -44,6 +45,6 @@ export function save(keyword, page, obj, values) {
     })
 
     // file
-    let fileName = obj.get('today') + "_" + obj.get('storename') + ".csv"
-    fs.appendFile(fileName, body.join('\n') + '\n', (err) => console.log(err, 'body 출력 : ' + keyword + " :: " + page));
+    // let fileName = obj.get('today') + "_" + obj.get('storename') + ".csv"
+    fs.appendFile(FILENAME, body.join('\n') + '\n', (err) => /* console.log(err, 'body 출력 : ' + keyword + " :: " + page) */ null);
 } 

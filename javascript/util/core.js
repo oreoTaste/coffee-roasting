@@ -1,3 +1,15 @@
+const findSelectorList = (article, selectorList) => {
+    let keyword = []
+    for(let selector of selectorList) {
+        keyword.push(...article.find(selector))
+    }
+    return keyword
+}
+
+export const reviewBody = (article, selectorList) => {
+    return findSelectorList(article, selectorList)
+}
+
 const findSelectorText = (article, selectorList) => {
     let keyword = ''
     for(let selector of selectorList) {
@@ -5,18 +17,21 @@ const findSelectorText = (article, selectorList) => {
     }
     return keyword
 }
-export const findProdName = (article, selectorList) => {
+export const reviewText = (article, selectorList) => {
+    return findSelectorText(article, selectorList)
+}
+export const findProdNameText = (article, selectorList) => {
     return findSelectorText(article, selectorList).replace(/,/g, '').replace(/_/g, ' ').replace(/\(/g, ' ').replace(/\)/g, ' ').replace(/\[/g, ' ').replace(/\]/g, ' ')
 }
-export const findPrice = (article, selectorList) => {
+export const findPriceText = (article, selectorList) => {
     return findSelectorText(article, selectorList).replace(/,/g, '').replace(/원/g, '')
 }
-export const prodDetail = (article, selectorList) => {
+export const prodDetailText = (article, selectorList) => {
     return findSelectorText(article, selectorList).replace(/,/g, '')
 }
 
 const findSelectorAttr = (article, selector, attr) => {
-    if(attr == 'attr') {
+    if(attr == 'src') {
         return article.find(`img${selector}`).attr('src')
     } else if(attr == 'length') {
         return article.find(selector).length
@@ -24,20 +39,20 @@ const findSelectorAttr = (article, selector, attr) => {
         return article.find(selector).attr('href')
     }
 }
-export const findImg = (article, selector) => {
-    return findSelectorAttr(article, selector, 'attr')
+export const findImgAttr = (article, selector) => {
+    return findSelectorAttr(article, selector, 'src')
 }
-export const findUrl = (article, selector, url) => {
+export const findUrlAttr = (article, selector, url) => {
     return url.slice(0, url.replace('//', '__').indexOf('/')) + findSelectorAttr(article, selector, 'href')
 }
-export const findIfNew = (article, selector) => {
+export const findIfNewAttr = (article, selector) => {
     return findSelectorAttr(article, selector, 'length') > 0 ? "New" : ""//new 태그 확인
 }
 
-export const findIfLimited = (article, selector) => {
+export const findIfLimitedAttr = (article, selector) => {
     return findSelectorAttr(article, selector, 'length') > 0 ? "Limited" : ""//limited 태그 확인
 }
-export const findCanBuy = (article, selector) => {
+export const findCanBuyAttr = (article, selector) => {
     return findSelectorAttr(article, selector, 'length') > 0 ? "N" : "Y"//품절 태그 확인
 }
 export const setHeader = () => {
