@@ -1,5 +1,39 @@
 import { save } from "./handleFile.js";
 
+export const findImg = (article, selector) => {
+    return article.find(`img${selector}`).attr('src')
+}
+export const findProdName = (article, selectorList) => {
+    let prodName = ''
+    for(let selector of selectorList) {
+        prodName += article.find(selector).text()
+    }
+    return prodName.replace(/,/g, '').replace(/_/g, ' ').replace(/\(/g, ' ').replace(/\)/g, ' ').replace(/\[/g, ' ').replace(/\]/g, ' ')
+}
+export const findPrice = (article, selectorList) => {
+    let price = ''
+    for(let selector of selectorList) {
+        price += article.find(selector).text()
+    }
+    return price.replace(/,/g, '').replace(/원/g, '')
+}
+export const findIfNew = (article, selector) => {
+    return article.find(selector).length > 0 ? "New" : ""//new 태그 확인
+}
+
+export const findIfLimited = (article, selector) => {
+    return article.find(selector).length > 0 ? "Limited" : ""//limited 태그 확인
+}
+export const findCanBuy = (article, selector) => {
+    return article.find(selector).length > 0 ? "N" : "Y"//품절 태그 확인
+}
+export const prodDetail = (article, selectorList) => {
+    let detail = ''
+    for(let selector of selectorList) {
+        detail += article.find(selector).text()
+    }
+    return detail.replace(/,/g, '')
+}
 export const setHeader = () => {
     let item = new Map()
     item.set('section', '')
