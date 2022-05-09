@@ -5,6 +5,7 @@ import { manageNaverPages } from "./util/naver.js";
 const STORENAME = 'KBX'
 
 export async function init() {
+    console.log("> kbx 시작")
     let obj = new Map()
     obj.set("storename", STORENAME)
     let now = new Date();
@@ -17,6 +18,7 @@ export async function init() {
     await manageNaverPages('아시아', '생두', 'https://smartstore.naver.com/cap/category/6cc038ba39ea49d09a31f9d42460190e?st=RECENT&free=false&dt=BIG_IMAGE&size=80', obj)
     await manageNaverPages('세계3대', '생두', 'https://smartstore.naver.com/cap/category/1cd8b72d354d4f559c4772409922f205?st=RECENT&free=false&dt=BIG_IMAGE&size=80', obj)
     await manageNaverPages('써티', '생두', 'https://smartstore.naver.com/cap/category/70cba7d725e84e4fb6ce5623b4d02e15?st=RECENT&free=false&dt=BIG_IMAGE&size=80', obj)
+    console.log("> kbx 종료")
 }
 
 // init();

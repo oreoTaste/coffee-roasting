@@ -1,3 +1,6 @@
+import iconv from 'iconv-lite';
+import axios from "axios";
+
 const findSelectorList = (article, selectorList) => {
     let keyword = []
     for(let selector of selectorList) {
@@ -42,8 +45,11 @@ const findSelectorAttr = (article, selector, attr) => {
 export const findImgAttr = (article, selector) => {
     return findSelectorAttr(article, selector, 'src')
 }
-export const findUrlAttr = (article, selector, url) => {
-    return url.slice(0, url.replace('//', '__').indexOf('/')) + findSelectorAttr(article, selector, 'href')
+export const findUrlAttr = (article, selector) => {
+    return findSelectorAttr(article, selector, 'href')
+}
+export const findTagAttr = (article, selector, tag) => {
+    return findSelectorAttr(article, selector, 'length') > 0 ? tag : ""//new 태그 확인
 }
 export const findIfNewAttr = (article, selector) => {
     return findSelectorAttr(article, selector, 'length') > 0 ? "New" : ""//new 태그 확인
@@ -122,4 +128,9 @@ export const inspectTitle = (title) => {
     obj.set('grade', checkParam(gradeList, titleList))
     obj.set('weight', checkWeight(weightList, titleList))
     return obj
+}
+
+export const axiosEncoded = async (url) => {
+    let resp = await axios.get(url, {responseType: 'arraybuffer'})
+    return iconv.decode(await resp.data, resp.headers['content-type'].includes('charset=')? resp.headers['content-type'].split('charset=')[1]: 'UTF-8')
 }

@@ -5,6 +5,7 @@ import { managePages } from "./util/namusairo.js";
 const STORENAME = 'NAMUSAIRO'
 
 export async function init() {
+    console.log("> namusairo 시작")
     let obj = new Map()
     obj.set("storename", STORENAME)
     let now = new Date();
@@ -14,7 +15,7 @@ export async function init() {
 
     await managePages('아프리카', '생두', 'https://namusairo.green/product/list.html?cate_no=24', obj)
     await managePages('아프리카', '원두', 'https://namusairo.com/product/list.html?cate_no=25', obj)
-
+    console.log("> namusairo 종료")
 }
 
 // init();

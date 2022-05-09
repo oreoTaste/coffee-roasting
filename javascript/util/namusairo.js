@@ -35,7 +35,7 @@ export async function getItemList(section, url) {
         item.set('img', findImgAttr($(article), '.thumb'))
 
         // buy_url
-        item.set('buy_url', findUrlAttr($(article), 'div.box > a:nth-child(2)', url))
+        item.set('buy_url', url.slice(0, url.replace('//', '__').indexOf('/')) + findUrlAttr($(article), 'div.box > a:nth-child(2)'))
 
         let prodName = findProdNameText($(article).find('p.name'), ['span:nth-child(2)'])
         item.set('product name', prodName)

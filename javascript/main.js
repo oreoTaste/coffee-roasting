@@ -14,16 +14,8 @@ async function start() {
     obj.set("url", '')
     saveHead(obj, setHeader(), FILENAME)
     
-    console.log("> coffeeSpell 시작")
     await coffeeSpellInit()
-    console.log("> coffeeSpell 종료")
-
-    console.log("> kbx 시작")
     await kbxInit()
-    console.log("> kbx 종료")
-
-    console.log("> namusairo 시작")
     await namusairoInit()
-    console.log("> namusairo 종료")
 }
 await start()

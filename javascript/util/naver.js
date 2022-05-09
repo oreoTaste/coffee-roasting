@@ -21,7 +21,7 @@ export async function getNaverItemList(section, url) {
         item.set('section', section)
         item.set('img', findImgAttr($(article), '._25CKxIKjAk', 'src'))
         // buy_url
-        item.set('buy_url', findUrlAttr($(article), 'a.linkAnchor', url))
+        item.set('buy_url', url.slice(0, url.replace('//', '__').indexOf('/')) + findUrlAttr($(article), 'a.linkAnchor'))
 
         let prodName = findProdNameText($(article), ['strong.QNNliuiAk3', 'strong._1Zvjahn0GA'])
         item.set('product name', prodName)
