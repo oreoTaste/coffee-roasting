@@ -14,11 +14,11 @@ export async function init() {
     // saveHead(obj, setHeader(), STORENAME)
 
     await managePages('아프리카', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=021&sort=goods_link.sort1&page_num=48', obj)
-    // await managePages('중남미', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=020&sort=goods_link.sort1&page_num=48', obj)
-    // await managePages('아시아태평양', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=019&sort=goods_link.sort1&page_num=48', obj)
-    // await managePages('스페셜', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=018&sort=goods_link.sort1&page_num=48', obj)
-    // await managePages('디카페인', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=025&sort=goods_link.sort1&page_num=48', obj)
+    await managePages('중남미', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=020&sort=goods_link.sort1&page_num=48', obj)
+    await managePages('아시아태평양', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=019&sort=goods_link.sort1&page_num=48', obj)
+    await managePages('스페셜', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=018&sort=goods_link.sort1&page_num=48', obj)
+    await managePages('디카페인', '생두', 'https://www.coffeeplant.co.kr/shop/goods/goods_list.php?category=025&sort=goods_link.sort1&page_num=48', obj)
     console.log("> coffeePlant 종료")
 }
 
-init();
+// init();
